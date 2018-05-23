@@ -2,7 +2,7 @@
 #include <linux/kernel.h>       /* Needed for KERN_INFO  */
 #include <linux/init.h>         /* Needed for the macros */
 #include <linux/fs.h>           /* libfs stuff           */
-#include <asm/uaccess.h>        /* copy_to_user          */
+//#include <asm/uaccess.h>        /* copy_to_user          */
 #include <linux/buffer_head.h>  /* buffer_head           */
 #include <linux/slab.h>         /* kmem_cache            */
 
