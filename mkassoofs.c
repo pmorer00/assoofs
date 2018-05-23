@@ -1,3 +1,8 @@
+/*
+ * Descripcion del guión: Permite formatear dispositivos de bloques como ASSOOFS
+ * Aclaración propia: aquí es donde se construye el sistema de ficheros assoofs
+ */
+
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/types.h>

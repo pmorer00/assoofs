@@ -1,3 +1,8 @@
+/*
+ * Descripcion del guión: Define y declara las estructuras de datos y constantes necesarias
+ */
+
+
 #define ASSOOFS_MAGIC 0x20170509
 #define ASSOOFS_DEFAULT_BLOCK_SIZE 4096
 #define ASSOOFS_FILENAME_MAXLEN 255
