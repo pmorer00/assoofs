@@ -1,4 +1,4 @@
-obj-m := helloWorldModule.o
+obj-m := assoofs.o
 
 all: ko
 
