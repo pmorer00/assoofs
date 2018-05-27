@@ -17,11 +17,20 @@ MODULE_AUTHOR("Pablo Moreno Roldan");
 
 
 /*
+ * Operaciones sobre el superbloque
+ */
+static const struct super_operations assoofs_sops = {
+	.drop_inode = generic_delete_inode ,
+};
+
+
+/*
  * Inicialización del superbloque
  */
 int assoofs_fill_super(struct super_block *sb, void *data, int silent){
 	struct buffer_head *bh;
 	struct assoofs_super_block_info *assoofs_sb_inf;
+	struct inode *root_inode;
 	int ret = 0;
 
 	printk(KERN_INFO "[ASSOOFS] assoofs_fill_super request\n") ;
@@ -44,10 +53,18 @@ int assoofs_fill_super(struct super_block *sb, void *data, int silent){
 	// 3. - Escribir la información persistente leı́da del dispositivo de bloques en el superbloque sb , incluı́do el campo s_op con las operaciones que soporta
 	sb->s_magic = ASSOOFS_MAGIC;
 	sb->s_maxbytes = ASSOOFS_DEFAULT_BLOCK_SIZE;
-	//lo kualo? Asignaremos operaciones (campo s_op al superbloque sb. Las operaciones del superbloque se definen como una variable de tipo struct super_operations como sigue:
-	sb->s_fs_info = *assoofs_sb_inf;
+	sb->s_ops = &assoofs_sops;
+	sb->s_fs_info = assoofs_sb_inf;
 
 	// 4. - Crear el inodo raı́z y asignarle operaciones sobre inodos (i_op) y sobre directorios (i_fop)
+	root_inode = new_inode(sb);
+	inode_init_owner(root_inode, NULL, S_IFDIR);
+	root_inode->i_ino = ASSOOFS_ROOTDIR_INODE_NUMBER; //número de inodo
+	root_inode->i_sb = sb; //puntero al superbloque
+	root_inode->i_op = &assoofs_inode_ops; //dirección de una variable de tipo struct inode_operations previamente declarada
+	root_inode->i_fop = &assoofs_file_operations; //dirección de una variable de tipo struct file_operations previamente declarada
+	root_inode->i_atime = root_inode->i_mtime = root_inode->i_ctime = CURRENT_TIME ; //fechas.
+	root_inode->i_private = assoofs_get_inode_info(sb, ASSOOFS_ROOTDIR_INODE_NUMBER); //Información persistente del inodo
 
 
 	return ret;
